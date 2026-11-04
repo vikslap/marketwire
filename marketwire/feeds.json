@@ -1,0 +1,25 @@
+{
+  "_note": "Each source: name, market (IN or US), url. Add or remove freely. A dead feed is skipped, not fatal.",
+  "sources": [
+    {"name": "ET Markets", "market": "IN", "url": "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms"},
+    {"name": "ET Stocks", "market": "IN", "url": "https://economictimes.indiatimes.com/markets/stocks/rssfeeds/2146842.cms"},
+    {"name": "Mint Markets", "market": "IN", "url": "https://www.livemint.com/rss/markets"},
+    {"name": "Mint Companies", "market": "IN", "url": "https://www.livemint.com/rss/companies"},
+    {"name": "Moneycontrol Latest", "market": "IN", "url": "https://www.moneycontrol.com/rss/latestnews.xml"},
+    {"name": "Moneycontrol Markets", "market": "IN", "url": "https://www.moneycontrol.com/rss/marketreports.xml"},
+    {"name": "Business Standard Markets", "market": "IN", "url": "https://www.business-standard.com/rss/markets-106.rss"},
+    {"name": "Business Standard Companies", "market": "IN", "url": "https://www.business-standard.com/rss/companies-101.rss"},
+    {"name": "BusinessLine Markets", "market": "IN", "url": "https://www.thehindubusinessline.com/markets/feeder/default.rss"},
+    {"name": "Google News India", "market": "IN", "url": "https://news.google.com/rss/search?q=NSE+OR+BSE+shares+when:1d&hl=en-IN&gl=IN&ceid=IN:en"},
+
+    {"name": "CNBC Top News", "market": "US", "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114"},
+    {"name": "CNBC Earnings", "market": "US", "url": "https://www.cnbc.com/id/15839135/device/rss/rss.html"},
+    {"name": "CNBC Investing", "market": "US", "url": "https://www.cnbc.com/id/15839069/device/rss/rss.html"},
+    {"name": "CNBC Finance", "market": "US", "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html"},
+    {"name": "MarketWatch Top", "market": "US", "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories"},
+    {"name": "MarketWatch Pulse", "market": "US", "url": "https://feeds.content.dowjones.io/public/rss/mw_marketpulse"},
+    {"name": "Yahoo Finance", "market": "US", "url": "https://finance.yahoo.com/news/rssindex"},
+    {"name": "Investing.com Stocks", "market": "US", "url": "https://www.investing.com/rss/news_25.rss"},
+    {"name": "Google News US", "market": "US", "url": "https://news.google.com/rss/search?q=NYSE+OR+Nasdaq+stock+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  ]
+}

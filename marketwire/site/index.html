@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MarketWire</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23e8590c'/><path d='M6 22l6-8 5 5 9-11' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5f2; --panel:#ffffff; --ink:#1b1c1f; --muted:#6b6e76; --line:#e4e2dc;
+  --accent:#e8590c; --in:#0f7b5f; --in-bg:#e3f4ee; --us:#2d5bd7; --us-bg:#e6ecfc;
+  --new:#fff4e6; --chip:#f0eee9;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121316; --panel:#1a1c20; --ink:#e9e8e4; --muted:#9a9ca3; --line:#2a2d33;
+    --accent:#ff7a33; --in:#43c59e; --in-bg:#163029; --us:#7c9cff; --us-bg:#1c2540;
+    --new:#2b2117; --chip:#24262b;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121316; --panel:#1a1c20; --ink:#e9e8e4; --muted:#9a9ca3; --line:#2a2d33;
+  --accent:#ff7a33; --in:#43c59e; --in-bg:#163029; --us:#7c9cff; --us-bg:#1c2540;
+  --new:#2b2117; --chip:#24262b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+.top{display:flex;align-items:center;gap:12px;padding:14px 0 10px}
+.logo{font-weight:700;font-size:19px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.logo b{color:var(--accent)}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--in);box-shadow:0 0 0 0 var(--in);animation:p 2s infinite}
+.pulse.stale{background:#c92a2a;animation:none}
+@keyframes p{70%{box-shadow:0 0 0 7px transparent}}
+.status{color:var(--muted);font-size:13px;margin-left:auto;text-align:right}
+.iconbtn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:15px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;padding-bottom:12px;align-items:center}
+.tabs{display:flex;background:var(--chip);border-radius:10px;padding:3px}
+.tabs button{border:0;background:none;color:var(--muted);font:600 13px Inter;padding:7px 12px;border-radius:8px;cursor:pointer}
+.tabs button.on{background:var(--panel);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.search{flex:1;min-width:180px;position:relative}
+.search input{width:100%;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:9px 12px;font:14px Inter;outline:none}
+.search input:focus{border-color:var(--accent)}
+.filter{display:none;align-items:center;gap:6px;font-size:13px;color:var(--muted);padding-bottom:10px}
+.filter.show{display:flex}
+.filter button{border:0;background:var(--chip);color:var(--ink);border-radius:6px;padding:3px 8px;cursor:pointer;font:12px Inter}
+.newbar{display:none;margin:12px auto 0;background:var(--accent);color:#fff;border:0;border-radius:20px;padding:7px 16px;font:600 13px Inter;cursor:pointer}
+.newbar.show{display:block}
+main{padding:6px 0 60px}
+.day{font:600 12px Inter;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:18px 0 6px}
+.item{display:grid;grid-template-columns:62px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.item.fresh{background:linear-gradient(90deg,var(--new),transparent);margin:0 -16px;padding-left:16px;padding-right:16px}
+.time{font:500 13px "IBM Plex Mono",monospace;color:var(--muted);padding-top:2px}
+.title{font-weight:600;font-size:15.5px;letter-spacing:-.005em}
+.title:hover{color:var(--accent)}
+.sum{color:var(--muted);font-size:13.5px;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:7px;font-size:12px;color:var(--muted)}
+.mk{font:600 10.5px Inter;padding:2px 6px;border-radius:5px;letter-spacing:.04em}
+.mk.IN{background:var(--in-bg);color:var(--in)} .mk.US{background:var(--us-bg);color:var(--us)}
+.tk{font:500 11.5px "IBM Plex Mono",monospace;background:var(--chip);border:1px solid var(--line);border-radius:5px;padding:1px 6px;cursor:pointer;color:var(--ink)}
+.tk:hover{border-color:var(--accent)}
+.tk.star{border-color:var(--accent);color:var(--accent)}
+.empty{text-align:center;color:var(--muted);padding:60px 0}
+.wl{display:flex;gap:6px;flex-wrap:wrap;padding:12px 0 0}
+.wl .tk{font-size:12.5px;padding:3px 8px}
+.wl input{border:1px dashed var(--line);background:transparent;color:var(--ink);border-radius:6px;padding:3px 8px;font:12.5px "IBM Plex Mono",monospace;width:150px}
+dialog{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:12px;max-width:440px;width:92%}
+dialog h3{margin:0 0 10px}
+.feedrow{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--line)}
+.bad{color:#c92a2a}
+.compact .sum,.compact .day{display:none}
+.compact .item{padding:7px 0}
+@media (max-width:560px){.item{grid-template-columns:48px 1fr;gap:8px}.status small{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <div class="logo"><span class="pulse" id="pulse"></span>Market<b>Wire</b></div>
+      <div class="status" id="status">Loading…</div>
+      <button class="iconbtn" id="health" title="Sources">⚙</button>
+      <button class="iconbtn" id="theme" title="Theme">☾</button>
+    </div>
+    <div class="controls">
+      <div class="tabs" id="tabs">
+        <button data-tab="all" class="on">All</button>
+        <button data-tab="IN">India</button>
+        <button data-tab="US">US</button>
+        <button data-tab="watch">★ Watchlist</button>
+      </div>
+      <div class="search"><input id="q" placeholder="Search news, company or ticker  ( / )" autocomplete="off"></div>
+    </div>
+    <div class="filter" id="filter"></div>
+  </div>
+</header>
+<div class="wrap">
+  <button class="newbar" id="newbar"></button>
+  <div class="wl" id="wl" hidden></div>
+  <main id="list"></main>
+</div>
+<dialog id="dlg"><h3>Sources</h3><div id="feeds"></div><p style="text-align:right;margin:14px 0 0"><button class="tk" onclick="dlg.close()">Close</button></p></dialog>
+
+<script>
+const REFRESH_MS = 120000;
+const params = new URLSearchParams(location.search);
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch{ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch{} }
+};
+let data = {items:[], names:{}};
+let tab = params.get("m") || store.get("tab", "all");
+let ticker = normTicker(params.get("t"));   // ?t=RELIANCE or ?t=US:AAPL (works in AmiBroker's web view)
+let watch = new Set(store.get("watch", []));
+let lastSeen = store.get("lastSeen", null);
+let pending = null;
+
+if (params.has("compact")) document.body.classList.add("compact");
+const theme = store.get("theme", null); if (theme) document.documentElement.dataset.theme = theme;
+
+function normTicker(t){
+  if (!t) return null;
+  t = t.trim().toUpperCase().replace(/^NSE:/, "IN:").replace(/^(NASDAQ|NYSE):/, "US:");
+  return t.includes(":") ? t : t; // bare symbols match either market
+}
+function matchTicker(item, t){
+  return item.tickers.some(k => k === t || k.split(":")[1] === t);
+}
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtTime = iso => new Date(iso).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit",hour12:false,timeZone:"Asia/Kolkata"});
+const fmtDay = iso => new Date(iso).toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"short",timeZone:"Asia/Kolkata"});
+function ago(iso){
+  const m = Math.round((Date.now() - new Date(iso)) / 60000);
+  return m < 1 ? "just now" : m < 60 ? `${m} min ago` : `${Math.floor(m/60)} h ${m%60} min ago`;
+}
+
+async function load(initial){
+  try{
+    const r = await fetch(`news.json?t=${Date.now()}`, {cache:"no-store"});
+    const fresh = await r.json();
+    if (!initial && data.items.length && fresh.items[0]?.link !== data.items[0]?.link){
+      const known = new Set(data.items.map(i => i.link));
+      const n = fresh.items.filter(i => !known.has(i.link)).length;
+      pending = fresh;
+      const bar = document.getElementById("newbar");
+      bar.textContent = `↑ ${n} new ${n === 1 ? "story" : "stories"}`;
+      bar.classList.add("show");
+      if (window.scrollY < 80) applyPending();
+    } else {
+      data = fresh;
+      if (initial) render();
+    }
+    status(fresh);
+  }catch(e){
+    document.getElementById("status").textContent = "Can't reach news.json";
+  }
+}
+function applyPending(){
+  if (!pending) return;
+  lastSeen = data.items[0]?.time || lastSeen;
+  data = pending; pending = null;
+  document.getElementById("newbar").classList.remove("show");
+  render();
+}
+function status(d){
+  const stale = Date.now() - new Date(d.updated) > 45 * 60000;
+  document.getElementById("pulse").classList.toggle("stale", stale);
+  const ok = d.feeds.filter(f => f.ok).length;
+  document.getElementById("status").innerHTML =
+    `Updated ${ago(d.updated)}<br><small>${d.count} stories · ${ok}/${d.feeds.length} sources</small>`;
+}
+
+function visible(){
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  return data.items.filter(i => {
+    const markets = new Set([i.market, ...i.tickers.map(k => k.slice(0,2))]);
+    if (tab === "IN" || tab === "US") { if (!markets.has(tab)) return false; }
+    if (tab === "watch" && !i.tickers.some(k => watch.has(k))) return false;
+    if (ticker && !matchTicker(i, ticker)) return false;
+    if (q){
+      const hay = (i.title + " " + i.summary + " " + i.source + " " + i.tickers.join(" ") + " " +
+        i.tickers.map(k => data.names[k] || "").join(" ")).toLowerCase();
+      if (!q.split(/\s+/).every(w => hay.includes(w))) return false;
+    }
+    return true;
+  });
+}
+
+function render(){
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
+  const f = document.getElementById("filter");
+  f.classList.toggle("show", !!ticker);
+  if (ticker) f.innerHTML = `Showing <b class="tk">${esc(ticker)}</b> ${esc(nameOf(ticker))} <button onclick="setTicker(null)">✕ clear</button>`;
+  renderWatch();
+
+  const items = visible().slice(0, 400);
+  const list = document.getElementById("list");
+  if (!items.length){
+    list.innerHTML = `<div class="empty">${tab === "watch" && !watch.size
+      ? "Your watchlist is empty. Click ☆ on any ticker chip, or add one above."
+      : "No stories match right now."}</div>`;
+    return;
+  }
+  let html = "", day = "";
+  for (const i of items){
+    const d = fmtDay(i.time);
+    if (d !== day){ html += `<div class="day">${d}</div>`; day = d; }
+    const fresh = lastSeen && i.time > lastSeen;
+    const chips = i.tickers.slice(0, 8).map(k =>
+      `<span class="tk ${watch.has(k) ? "star" : ""}" data-k="${k}" title="${esc(data.names[k] || "")} — click to filter, shift-click to ★">${watch.has(k) ? "★ " : ""}${k.split(":")[1]}</span>`
+    ).join("");
+    html += `<article class="item ${fresh ? "fresh" : ""}">
+      <div class="time">${fmtTime(i.time)}</div>
+      <div>
+        <a class="title" href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title)}</a>
+        ${i.summary ? `<div class="sum">${esc(i.summary)}</div>` : ""}
+        <div class="meta"><span class="mk ${i.market}">${i.market === "IN" ? "INDIA" : "US"}</span>${esc(i.source)} ${chips}</div>
+      </div></article>`;
+  }
+  list.innerHTML = html;
+}
+function nameOf(t){
+  const k = Object.keys(data.names).find(k => k === t || k.split(":")[1] === t);
+  return k ? data.names[k] : "";
+}
+function renderWatch(){
+  const el = document.getElementById("wl");
+  el.hidden = tab !== "watch";
+  if (el.hidden) return;
+  el.innerHTML = [...watch].map(k => `<span class="tk star" data-k="${k}" data-rm="1" title="Remove">★ ${k} ✕</span>`).join("") +
+    `<input id="addw" placeholder="+ IN:SYMBOL or US:SYM">`;
+  document.getElementById("addw").addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+    let v = normTicker(e.target.value);
+    if (!v) return;
+    if (!v.includes(":")) v = "IN:" + v;
+    watch.add(v); store.set("watch", [...watch]); render();
+  });
+}
+function setTicker(t){
+  ticker = t;
+  const u = new URL(location); t ? u.searchParams.set("t", t) : u.searchParams.delete("t");
+  history.replaceState(null, "", u);
+  render(); window.scrollTo(0, 0);
+}
+
+document.addEventListener("click", e => {
+  const chip = e.target.closest(".tk[data-k]");
+  if (!chip) return;
+  const k = chip.dataset.k;
+  if (chip.dataset.rm || e.shiftKey){
+    watch.has(k) ? watch.delete(k) : watch.add(k);
+    store.set("watch", [...watch]); render();
+  } else setTicker(k);
+});
+document.getElementById("tabs").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  tab = b.dataset.tab; store.set("tab", tab); render();
+});
+document.getElementById("q").addEventListener("input", render);
+document.getElementById("newbar").addEventListener("click", () => { applyPending(); window.scrollTo(0,0); });
+document.getElementById("theme").addEventListener("click", () => {
+  const cur = document.documentElement.dataset.theme ||
+    (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const next = cur === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next; store.set("theme", next);
+});
+const dlg = document.getElementById("dlg");
+document.getElementById("health").addEventListener("click", () => {
+  document.getElementById("feeds").innerHTML = data.feeds.map(f =>
+    `<div class="feedrow"><span>${esc(f.name)}</span><span class="${f.ok ? "" : "bad"}">${f.ok ? f.count + " items" : "failed"}</span></div>`).join("");
+  dlg.showModal();
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement.tagName !== "INPUT"){ e.preventDefault(); document.getElementById("q").focus(); }
+});
+window.addEventListener("scroll", () => { if (window.scrollY < 80 && pending) applyPending(); });
+window.addEventListener("beforeunload", () => { if (data.items[0]) store.set("lastSeen", data.items[0].time); });
+
+load(true);
+setInterval(load, REFRESH_MS);
+setInterval(() => data.updated && status(data), 30000);
+</script>
+</body>
+</html>
